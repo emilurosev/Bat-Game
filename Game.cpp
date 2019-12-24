@@ -137,7 +137,7 @@ void Game::render() {
 
 void Game::levelCheck() {
     if(score == 5) {
-        texture = background->loadTexture("/home/emil/cpp/Igrica/assets/background+scene+corridor002.png");
+        texture = background->loadTexture("./assets/background+scene+corridor002.png");
         SDL_QueryTexture(texture, NULL, NULL, &bgWidth, &bgHeight);
         player->setScreenHeight(bgHeight);
         player->setScreenWidth(bgWidth);
@@ -145,7 +145,7 @@ void Game::levelCheck() {
         coinGain = 5;
     }
     else if(score == 9) {
-        texture = background->loadTexture("/home/emil/cpp/Igrica/assets/maxresdefault.png");
+        texture = background->loadTexture("./assets/maxresdefault.png");
         SDL_QueryTexture(texture, NULL, NULL, &bgWidth, &bgHeight);
         player->setScreenHeight(bgHeight);
         player->setScreenWidth(bgWidth);
