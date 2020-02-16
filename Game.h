@@ -1,6 +1,7 @@
 #pragma once
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_image.h"
+#include "SDL2/SDL_mixer.h"
 #include <iostream>
 #include "TextureManager.h"
 
@@ -39,6 +40,9 @@ private:
     float time = 0.01;
     float bigCoinTime = 10.0;
     int coinGain = 3;
+    Mix_Music *backgroundMusic;
+    Mix_Chunk *soundEffect;
+    Mix_Chunk *soundEffect2;
     
 };
 

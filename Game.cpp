@@ -59,6 +59,17 @@ void Game::init(const char* title, int x, int y, int width, int height, bool ful
                 randomX = rand() % (bgWidth-40);
                 randomY = rand() % (bgHeight-40);
                 coin1 = new Coin(randomX, randomY, 40, 40);
+
+                if(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
+                    cerr << Mix_GetError() << endl;
+                }
+                else {
+                    backgroundMusic = Mix_LoadMUS("assets/Tube & Berger, Juliet Sikora - Come On Now (Set It Off) OFFICIAL.mp3");
+                    soundEffect = Mix_LoadWAV("assets/pacman_eatfruit.wav");
+                    soundEffect2 = Mix_LoadWAV("assets/pacman_eatghost.wav");
+
+                    Mix_PlayMusic(backgroundMusic, -1);
+                }
                 
              }
         }
@@ -77,7 +88,20 @@ void Game::handleEvents() {
                     case SDL_SCANCODE_ESCAPE:
                         isRunning = false;
                         break;
-            
+                    case SDL_SCANCODE_P:
+                        if(!Mix_PlayingMusic()) {
+                            Mix_PlayMusic(backgroundMusic, -1);
+                        }
+                        else if(Mix_PausedMusic()) {
+                            Mix_ResumeMusic();
+                        }
+                        else {
+                            Mix_PauseMusic();
+                        }
+                        break;
+                    case SDL_SCANCODE_O:
+                        Mix_HaltMusic();
+                        break;
                 }
         }
         getKeyState = SDL_GetKeyboardState(NULL);        
@@ -158,6 +182,9 @@ void Game::colidedWithCoin() {
     col = coin1->collisionCircle(*player);
     if(col == true) {
         delete coin1;
+        
+        Mix_PlayChannel(-1, soundEffect, 0);
+        
         score++;
         health += coinGain;
 
@@ -178,6 +205,9 @@ void Game::bonus() {
             score += 5;
             health += 10;
             delete coin2;
+
+            Mix_PlayChannel(-1, soundEffect2, 0);
+
         }
     }
 }
@@ -187,6 +217,11 @@ void Game::clean() {
     SDL_DestroyTexture(texture);
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
+    Mix_FreeChunk(soundEffect);
+    Mix_FreeMusic(backgroundMusic);
+    backgroundMusic = nullptr;
+    soundEffect = nullptr;
+    Mix_Quit();
     IMG_Quit();
     SDL_Quit();
     cout << endl << endl << endl << endl << endl;
